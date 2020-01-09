@@ -12,6 +12,8 @@ int value = max_value * frac.numerator / frac.denominator;
 int value = max_value * frac.numerator / 1000;
 ```
 
+It turns out unexpectedly that the one without float conversion is the slowest. The culprit could be integer division is 10 times slower than float division.
+
 ```
 C# 7, .NET Framework 4.6.1
 ===========================
