@@ -1,18 +1,27 @@
-# in_between_max_benchmark
-Benchmark of calculating the in-between value of a max value.
+# Optimization turns out to be pessimization!
+
+I have doing this optimization in my hobby OpenGL projects for years. My only sin is I did not measure their performance. I just assumed the one with less operation must be the faster one. Whenever a programmer wants to do get a fractional value of a maximum integer value, he/she cast the numerator and denominator to float before doing division and get the product of the division result and the max value and then cast back the result to integer. See below
 
 ```Cpp
 // With float conversion
-int value = (int)(((float)frac.numerator / frac.denominator) * max_value);
-
-// Without float conversion
-int value = max_value * frac.numerator / frac.denominator;
-
-// Without float conversion with constant divisor
-int value = max_value * frac.numerator / 1000;
+int value = (int)(((float)numerator / denominator) * max_value);
 ```
 
-It turns out unexpectedly that the one without float conversion is the slowest. The culprit could be integer division is several times slower than float division. See [Floating Point and Integer Arithmetic Benchmark](https://github.com/shaovoon/arithmeticbench)
+Being the smart ass I am, I get the product of max value and numerator before divided by denominator. In that way, I can get away with casting to float and back. but with this method, care must be taken that product of max value and numerator must never exceed the maximum limit of integer!
+
+```Cpp
+// Without float conversion
+int value = max_value * numerator / denominator;
+```
+
+To my dismay, I discovered today that the one with float conversion is the faster one. The culprit could be integer division is several times slower than float division. See [Floating Point and Integer Arithmetic Benchmark](https://github.com/shaovoon/arithmeticbench)
+
+It turns out that it is also the faster than a constant literal divisor.
+
+```Cpp
+// Without float conversion with constant divisor
+int value = max_value * numerator / 1000;
+```
 
 ```
 C# 7, .NET Framework 4.6.1
