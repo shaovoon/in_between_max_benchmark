@@ -49,3 +49,4 @@ VC++, update 16.4, /Ox
     Without float conversion with constant divisor timing: 1022ms
 ```
 
+The lesson here is to always measure, measure and measure!
